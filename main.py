@@ -12,8 +12,6 @@ closed_msg = "The resistore has closed..."
 print("Starting loop")
 prev_result = 1
 
-prev_result = 0
->>>>>>> ca590a46679bd570f36b4a2b277634c3afb2649e
 while True:
     response = request.urlopen("https://resi.store/lux.bool").read()
     result = int(response.decode()[0])
