@@ -8,7 +8,7 @@ pst = pytz.timezone('America/Los_Angeles')
 
 open_msg = "The resistore has opened!"
 closed_msg = "The resistore has closed..."
-
+print("Starting loop")
 prev_result = 1
 while True:
     response = request.urlopen("https://resi.store/lux.bool").read()
