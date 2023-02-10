@@ -1,13 +1,19 @@
-from urllib import request, parse
+from urllib import request, parse, error
 from time import sleep
 import os
 import pytz
 from datetime import datetime
-
+import logging
+logging.basicConfig(format='%(asctime)s %(message)s')
 def query_status() -> int:
-    response = request.urlopen("https://resi.store/lux.bool").read()
-    result = int(response.decode()[0])
-    return result
+    try: 
+        response = request.urlopen("https://resi.store/lux.bool").read()
+        result = int(response.decode()[0])
+        return result
+    except error.URLError:
+        # Maybe not goood
+        logging.error("lost connection")
+        return 0 
 
 pst = pytz.timezone('America/Los_Angeles')
 
