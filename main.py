@@ -4,6 +4,14 @@ import os
 import pytz
 from datetime import datetime
 import logging
+import apprise
+
+apobj = apprise.Apprise()
+# Add all of the notification services by their server url.
+# A sample email notification:
+apobj.add('discord://1076219692806590464/BcpBdfHcyzonpVR5_qY41WgExhMpJ8L7iMQUEzAZuYubwaweOX52rovdPhAbZDXFZhe9')
+
+
 logging.basicConfig(format='%(asctime)s %(message)s')
 def query_status() -> int:
     try: 
@@ -31,12 +39,18 @@ while True:
     result = query_status()
     if result != prev_result:
         pst_time = datetime.now(pst).strftime("%I:%M %p")
+        msg = open_msg if result else closed_msg
         tag = "green_square,grinning" if result else "red_square,frowning_face"
         curl_cmd = f"""curl -d \"{open_msg if result else closed_msg}\" \
                             -H 'Title: ResiSTORE Status @ {pst_time}' \
                             -H 'Tags: {tag}' \
                             ntfy.sh/resistore
                     """
+
+        apobj.notify(
+                body = msg,
+                title = f"ResiSTORE Status @ {pst_time}"
+        )
         os.system(curl_cmd)
     prev_result = result
     sleep(30)
