@@ -5,15 +5,17 @@ import pytz
 from datetime import datetime
 import logging
 import apprise
-import config
 
 apobj = apprise.Apprise()
-# Add all of the notification services by their server url.
-# A sample email notification:
-# need to do config fileapobj.add('discord://1076219692806590464/BcpBdfHcyzonpVR5_qY41WgExhMpJ8L7iMQUEzAZuYubwaweOX52rovdPhAbZDXFZhe9')
-discordid = config.discordurl.split("/")[-2]
-discordtoken = config.discordurl.split("/")[-1]
-apobj.add(f'discord://{discordid}/{discordtoken}')
+
+try:
+    import config
+    discordid = config.discordurl.split("/")[-2]
+    discordtoken = config.discordurl.split("/")[-1]
+    apobj.add(f'discord://{discordid}/{discordtoken}')
+except ModuleNotFoundError:
+    print("no config file")
+
 logging.basicConfig(format='%(asctime)s %(message)s')
 def query_status() -> int:
     try: 
